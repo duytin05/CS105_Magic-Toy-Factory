@@ -120,8 +120,6 @@ http://localhost:8080
 ```text
 /magic-toy-factory
 ├── index.html              # File khởi chạy chính
-├── welcome.css             # Hiệu ứng màn hình chờ
-├── style.css               # UI chính (Glass-morphism)
 ├── models/                 # Chứa tài nguyên mô hình 3D (.glb)
 ├── src/                    # Logic xử lý lõi
 │   ├──  animation/          # Hiệu ứng GSAP
@@ -130,6 +128,8 @@ http://localhost:8080
 │   ├── data/
 │   ├── objects/            # Sinh vật thể cơ bản & Load Custom Model
 │   ├── ui/                 # Xử lý logic bảng điều khiển, Texture Upload
+│   ├── welcome.css             # Hiệu ứng màn hình chờ
+│   ├── style.css               # UI chính (Glass-morphism)
 │   └──main.js             # Entry point    
 └── README.md               # Tài liệu dự án
 ```
