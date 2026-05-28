@@ -1,0 +1,72 @@
+#welcome-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #1e272e 0%, #000 100%);
+    z-index: 10000; display: flex; justify-content: center; align-items: center;
+    transition: all 1s ease-in-out;
+}
+
+.welcome-content { text-align: center; }
+
+.welcome-logo {
+    display: inline-block; 
+    font-size: 70px; 
+    color: #ffffff; 
+    font-family: 'Comfortaa', cursive;
+    text-shadow: 
+        0 1px 0 #00cec9, 0 2px 0 #00b3b0, 0 3px 0 #009996, 0 4px 0 #00807d,
+        0 5px 0 #006664, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1),
+        0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2),
+        0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2),
+        0 20px 20px rgba(0,0,0,.15);
+    margin: 0; 
+    padding: 0;
+    margin-bottom: 30px; 
+    letter-spacing: 3px;
+    transform: scale(0);
+}
+
+.loading-container {
+    width: 350px;
+    height: 18px;
+    border: 3px solid #00cec9; 
+    border-radius: 10px;
+    padding: 2px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.loader-line {
+    width: 0%; 
+    height: 100%; 
+    background: #00cec9; 
+    border-radius: 4px;
+    box-shadow: 0 0 10px #00cec9;
+}
+
+.welcome-text {
+    color: #dfe6e9; margin-top: 15px; font-style: italic; 
+    letter-spacing: 2px; opacity: 0.8;
+}
+
+.rocket-model {
+    width: 300px; 
+    height: 300px;
+    margin: 20px auto 0 auto;
+    
+    background-color: transparent;
+    --poster-color: transparent; 
+    animation: float 3.5s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(8deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+#sidebar-left { transform: translateX(-120%); transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+#sidebar-right { transform: translateX(120%); transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+#top-bar { transform: translateY(-120%); transition: transform 0.8s ease; }
+#bottom-bar { transform: translateY(120%); transition: transform 0.8s ease; }
+
+.show-ui { transform: translate(0) !important; }

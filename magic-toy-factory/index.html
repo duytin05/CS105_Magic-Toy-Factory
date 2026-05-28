@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic 3D Toy Factory</title>
+    <link rel="stylesheet" href="./src/style.css">
+    <link rel="stylesheet" href="./src/welcome.css">
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/",
+          "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/",
+          "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
+          "lil-gui": "https://cdn.jsdelivr.net/npm/lil-gui@0.19.2/+esm"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="welcome-overlay">
+        <div class="welcome-content">
+            <h1 class="welcome-logo">✨ MAGIC 3D TOY FACTORY</h1>
+            
+            <div class="loading-container">
+                <div class="loader-line"></div>
+            </div>
+            
+            <p class="welcome-text">Đang triệu hồi cỗ máy ma thuật...</p>
+            
+            <model-viewer 
+              src="./models/Rocketship.glb" 
+              auto-rotate 
+              interaction-prompt="none"
+              camera-controls="false"
+              orientation="0deg 60deg 60deg"
+              class="rocket-model">
+            </model-viewer>
+        </div>
+    </div>
+
+    <header id="top-bar">
+      <h1 class="logo">✨ MAGIC 3D TOY FACTORY</h1>
+      <button class="btn-guide">❓ Hướng dẫn</button>
+    </header>
+
+    <div id="ui-container">
+      
+      <aside id="sidebar-left" class="glass-panel">
+        <button id="btn-toggle-left" class="toggle-btn">❮</button>
+
+        <h2 class="panel-title title-cyan">🗄️ TỦ NGUYÊN LIỆU</h2>
+        <hr class="divider">
+        
+        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
+            <p class="section-label" style="margin-top: 0; text-align: center; color: #edf2f2;">👁 Cài đặt chế độ vẽ ban đầu</p>
+            <select id="create-mode-select" class="dropdown" style="width: 100%; margin-bottom: 0;">
+                <option value="point" >Point (Các điểm)</option>
+                <option value="lines">Lines (Đường nét)</option>
+                <option value="solid" selected>Solid (Khối đặc)</option>
+            </select>
+        </div>
+
+        <hr class="divider" style="margin: 10px 0 10px 0;">
+
+        <p class="section-label">Khối cơ bản:</p>
+        <div class="control-group" style="display: flex; gap: 8px; margin-bottom: 10px; height: 35px; align-items: center;">
+            <select id="basic-shape-select" class="dropdown" style="flex: 1; padding: 5px; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); outline: none; cursor: pointer;"></select>
+            
+            <input type="color" id="basic-shape-color" value="#00cec9" disabled style="width: 35px; height: 100%; border: none; border-radius: 4px; cursor: not-allowed; background: transparent; padding: 0; opacity: 0.3; transition: all 0.3s; flex-shrink: 0;">
+            
+            <label style="color: #dfe6e9; font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0;" title="Dùng màu mặc định">
+                <input type="checkbox" id="basic-use-default" checked style="margin: 0; cursor: pointer;" onchange="const cp = document.getElementById('basic-shape-color'); cp.disabled = this.checked; cp.style.opacity = this.checked ? '0.3' : '1'; cp.style.cursor = this.checked ? 'not-allowed' : 'pointer';"> Gốc
+            </label>
+        </div>
+        <button id="btn-add-basic-shape" class="btn-item btn-cyan" style="width: 100%;">➕ Thêm Khối Cơ Bản</button>
+        
+        <p class="section-label" style="margin-top: 25px;">Đồ chơi mô hình đặc biệt:</p>
+        <div class="control-group" style="display: flex; gap: 8px; margin-bottom: 10px; height: 35px; align-items: center;">
+            <select id="custom-model-select" class="dropdown" style="flex: 1; padding: 5px; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); outline: none; cursor: pointer;">
+                <option value="./models/Cute Red Dino.glb" style="color: black;">🦖 T-Rex cute</option>
+                <option value="./models/Parasaurolophus.glb" style="color: black;">🦕 Parasaurolophus</option>
+                <option value="./models/cartoon banana car.glb" style="color: black;">🍌 Xe cartoon chuối</option>
+                <option value="./models/Animated Robot.glb" style="color: black;">🤖 Robot cartoon </option>
+                <option value="./models/Super Robot !.glb" style="color: black;">🦾 Siêu Robot</option>
+            </select>
+            
+            <input type="color" id="custom-model-color" value="#ff7675" disabled style="width: 35px; height: 100%; border: none; border-radius: 4px; cursor: not-allowed; background: transparent; padding: 0; opacity: 0.3; transition: all 0.3s; flex-shrink: 0;">
+            
+            <label style="color: #dfe6e9; font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0;" title="Dùng màu gốc của 3D Model">
+                <input type="checkbox" id="custom-use-default" checked style="margin: 0; cursor: pointer;" onchange="const cp = document.getElementById('custom-model-color'); cp.disabled = this.checked; cp.style.opacity = this.checked ? '0.3' : '1'; cp.style.cursor = this.checked ? 'not-allowed' : 'pointer';"> Gốc
+            </label>
+        </div>
+        <button id="btn-add-custom-model" class="btn-item btn-cyan" style="width: 100%;">➕ Thêm Mô Hình</button>
+
+        <hr class="divider" style="margin: 10px 0 10px 0;">
+        
+        <button id="btn-delete" class="btn-danger" style="display: block; width: 100%; margin-bottom: 10px; text-align: center;">🗑 Xóa đồ chơi đang chọn</button>
+        <button id="btn-delete-all" class="btn-danger" style="display: block; width: 100%; background: #c0392b; text-align: center;margin-bottom: 10px;">🧨 Xóa tất cả đồ chơi</button>
+        <button id="btn-undo" class="btn-item btn-outline" style="display: block; width: 100%;  text-align: center;">↩️ Hoàn tác</button>
+
+      </aside>
+
+      <aside id="sidebar-right" class="glass-panel">
+        <button id="btn-toggle-right" class="toggle-btn">❯</button>
+
+        <h2 class="panel-title title-pink">🪄 CÔNG CỤ MA THUẬT</h2>
+        <hr class="divider">
+        <div class="status-container">
+            <span id="status-text" class="status-badge">🎯 Đang chọn: 0 đồ chơi</span>
+        </div>
+
+        <p class="section-label" style="margin-top: 10px;">👁 Đổi chế độ vẽ:</p>
+        
+        <p style="font-size: 13px; color: #dfe6e9; margin-bottom: 5px; text-align: center;">
+            Đang hiển thị: <b id="current-mode-display" style="color: #ff9800;">Chưa chọn</b>
+        </p>
+
+        <select id="edit-mode-select" class="dropdown" style="margin-bottom: 5px;">
+            <option value="point">Hóa thành Point</option>
+            <option value="lines">Hóa thành Lines</option>
+            <option value="solid" selected>Hóa thành Solid</option>
+        </select>
+        
+        <button id="btn-apply-mode" class="btn-item btn-cyan" style="width: 100%; margin-bottom: 10px;">✨ Thay đổi</button>
+        
+        <p class="section-label" style="margin-top: 15px;">🎨 Dán nhãn (Texture):</p>
+        <div id="texture-presets" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+            <img src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/crate.gif" class="preset-tex" title="Thùng Gỗ">
+            <img src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/brick_diffuse.jpg" class="preset-tex" title="Tường Gạch">
+            <img src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/terrain/grasslight-big.jpg" class="preset-tex" title="Thảm Cỏ">
+            <img src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg" class="preset-tex" title="Mặt Nước">
+            <img src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/uv_grid_opengl.jpg" class="preset-tex" title="Lưới Màu">
+        </div>
+        <input type="file" id="texture-upload" accept="image/*" style="display: none;">
+        <button id="btn-upload-texture" class="btn-item btn-cyan" style="width: 100%;">📁 Chọn ảnh từ máy tính</button>
+        <button id="btn-remove-texture" class="btn-item btn-outline" style="margin-top: 5px; width: 100%; text-align: center;">🧽 Xóa texture</button>
+
+        <p class="section-label" style="margin-top: 15px;">⚡ Đũa thần biến hình:</p>
+        <button id="btn-translate" class="btn-item btn-outline" style = "width: 100%;margin-bottom: 5px; text-align: center;">✥ Dời chỗ (Translate)</button>
+        <button id="btn-rotate" class="btn-item btn-outline" style="width: 100%;margin-bottom: 5px; text-align: center;">↻ Xoay tròn (Rotate)</button>
+        <button id="btn-scale" class="btn-item btn-outline" style="width: 100%;margin-bottom: 5px; text-align: center;">⤢ Phóng to (Scale)</button>
+      </aside>
+    </div>
+
+    <div id="bottom-bar">
+      <button class="btn-run">🚀 CHẠY DÂY CHUYỀN CHẾ TẠO</button>
+    </div>
+
+    <div id="alert-overlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); z-index: 9998; backdrop-filter: blur(4px);"></div>
+
+    <div id="custom-alert" class="hidden glass-panel alert-box" style="z-index: 9999;">
+        <h3 id="alert-title" style="margin:0 0 10px 0; color:#ff9800;">⚠️ Xưởng đầy rồi!</h3>
+        <p id="alert-msg" style="margin: 0 0 15px 0;">Nội dung</p>
+        <button id="btn-close-alert" class="btn-run" style="width: 100%;">Đã hiểu</button>
+    </div>
+    
+    <div id="toast-container" aria-live="polite"></div>
+    
+    <script type="module" src="./src/main.js"></script>
+
+    <div id="guide-overlay" class="hidden overlay"></div>
+
+    <div id="guide-modal" class="hidden glass-panel guide-box">
+        <h2 class="title-cyan" style="text-align: center; margin-bottom: 20px;">📖 BÍ KÍP XƯỞNG ĐỒ CHƠI</h2>
+        <div class="guide-content">
+            <p><b>🖱️ Chuột trái:</b> Click để chọn 1 món đồ chơi.</p>
+            <p><b>⌨️ Shift + Click:</b> Chọn nhiều món cùng lúc.</p>
+            <p><b>🖱️ Chuột phải:</b> Giữ và kéo để xoay camera nhìn quanh xưởng.</p>
+            <p><b>⚙️ Lăn chuột:</b> Phóng to, thu nhỏ góc nhìn.</p>
+            
+            <hr class="divider">
+            <p><b>🪄 Mẹo đổi chế độ hàng loạt:</b></p>
+            <p style="font-size: 13.5px; color: #fdcb6e; margin-top: 5px;">Để đổi chế độ vẽ cho <b>TẤT CẢ</b> đồ chơi trong xưởng, bạn KHÔNG cần chọn hết. Chỉ cần click ra khoảng trống trên sàn để đảm bảo <b>không chọn đồ chơi nào</b>, sau đó chọn chế độ vẽ ở bảng bên phải và bấm <b>Thay đổi</b>.</p>
+
+            <hr class="divider">
+            <p><b>⚡ Phím tắt thần thánh:</b></p>
+            <ul>
+                <li>Phím <b>T</b>: Kéo đồ chơi đi chỗ khác.</li>
+                <li>Phím <b>R</b>: Xoay đồ chơi.</li>
+                <li>Phím <b>S</b>: Phóng to đồ chơi.</li>
+                <li style="color: #00cec9;">Phím <b>H</b>: Ẩn/Hiện bảng điều khiển Giáo viên (Camera, Đèn chiếu...).</li>
+            </ul>
+        </div>
+        <button id="btn-close-guide" class="btn-run" style="width: 100%; margin-top: 20px; padding: 10px;">Đã hiểu!</button>
+    </div>
+  </body>
+</html>

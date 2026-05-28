@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap');
+
+body 
+{
+    margin: 0; overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    background: #1a1a2e; 
+    color: #e0e0e0;
+}
+
+canvas { display: block; }
+
+#top-bar 
+{
+    position: absolute; top: 0; left: 0; width: 100%;
+    padding: 15px 30px; box-sizing: border-box;
+    display: flex; justify-content: space-between; align-items: center;
+    pointer-events: none; z-index: 10;
+}
+
+#ui-container 
+{
+    position: absolute; top: 70px; left: 0; width: 100%; height: calc(100% - 140px);
+    pointer-events: none; display: flex; justify-content: space-between;
+    padding: 0 20px; box-sizing: border-box; z-index: 10;
+}
+
+#bottom-bar 
+{
+    position: absolute; bottom: 20px; width: 100%;
+    display: flex; justify-content: center; pointer-events: none; z-index: 10;
+}
+
+.glass-panel 
+{
+    pointer-events: auto;
+    background: rgba(30, 30, 46, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    width: 260px;
+    height: fit-content;
+    max-height: 100%; overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.logo { margin: 0; font-size: 20px; font-weight: 900; color: #f9ca24; text-shadow: 0 0 10px rgba(249,202,36,0.5); pointer-events: auto; }
+.panel-title { margin: 0; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.title-cyan { color: #00cec9; text-shadow: 0 0 8px rgba(0,206,201,0.4); }
+.title-pink { color: #fd79a8; text-shadow: 0 0 8px rgba(253,121,168,0.4); }
+.section-label { font-size: 13px; color: #b2bec3; margin: 0 0 10px 0; }
+.divider { border: 0; border-top: 1px dashed rgba(255,255,255,0.15); margin: 15px 0; }
+
+/* === CÁC LOẠI BUTTON === */
+button { font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; pointer-events: auto; font-weight: 700; }
+button:active { transform: scale(0.95); }
+
+.btn-guide { background: rgba(255,107,129,0.2); color: #ff6b81; border: 1px solid #ff6b81; padding: 8px 16px; border-radius: 20px; }
+.btn-guide:hover { background: #ff6b81; color: white; }
+
+.button-grid { display: flex; flex-direction: column; gap: 8px; }
+.btn-item { background: rgba(255,255,255,0.05); color: #dfe6e9; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; text-align: left; }
+.btn-item:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+.btn-outline { border-color: #f9ca24; color: #f9ca24; }
+.btn-cyan { background: linear-gradient(135deg, #00cec9, #0984e3); border: none; color: white; border-radius: 8px; text-align: center; }
+
+.btn-run { background: linear-gradient(135deg, #ff7675, #d63031); border: none; padding: 15px 40px; color: white; font-size: 16px; border-radius: 30px; box-shadow: 0 0 20px rgba(214,48,49,0.5); text-transform: uppercase; font-weight: 900; }
+.btn-run:hover { box-shadow: 0 0 30px rgba(214,48,49,0.8); }
+
+.btn-danger { background: #d63031; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; }
+
+.dropdown { width: 100%; padding: 10px; background: rgba(0,0,0,0.2); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-family: 'Nunito'; }
+
+.alert-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; text-align: center; border: 2px solid #ff9800; z-index: 1000; }
+.hidden { display: none !important; }
+
+.overlay 
+{
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px); 
+    z-index: 999; 
+    pointer-events: auto; 
+}
+
+.guide-box 
+{
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    z-index: 1000;
+}
+
+.guide-content {
+    color: #dfe6e9; font-size: 14.5px; line-height: 1.6;
+}
+
+.guide-content p {
+    margin: 8px 0;
+}
+
+.guide-content ul {
+    padding-left: 20px; margin-top: 5px; margin-bottom: 0;
+}
+
+/* === TRẠNG THÁI ĐANG CHỌN === */
+.status-container 
+{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.status-badge 
+{
+    display: inline-block;
+    background: rgba(0, 206, 201, 0.15);
+    color: #00cec9;
+    border: 1px solid rgba(0, 206, 201, 0.4);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 0 10px rgba(0, 206, 201, 0.2);
+    transition: all 0.3s ease;
+}
+
+.status-badge.active 
+{
+    background: rgba(253, 121, 168, 0.2);
+    color: #fd79a8;
+    border-color: #fd79a8;
+    box-shadow: 0 0 15px rgba(253, 121, 168, 0.4);
+    transform: scale(1.05); 
+}
+
+/* === THÔNG BÁO ĐÃ XÓA === */
+#toast-container 
+{
+    position: fixed;
+    bottom: 90px; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column-reverse; 
+    gap: 10px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.delete-toast 
+{
+    background: linear-gradient(135deg, #ff4757, #ff6b81);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 900;
+    font-size: 15px;
+    border: 2px solid rgba(255,255,255,0.5);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
+    animation: slideUpFade 0.3s ease forwards, fadeOutDown 0.3s ease 1.7s forwards; 
+}
+
+/* Khung hình Animation */
+@keyframes slideUpFade 
+{
+    from { opacity: 0; transform: translateY(30px) scale(0.8); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeOutDown 
+{
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(20px) scale(0.8); }
+}
+
+
+/* ===  lil-gui NẰM NGANG === */
+
+.lil-gui.root {
+    width: max-content !important; 
+}
+
+.lil-gui.root > .children {
+    display: flex !important;
+    flex-direction: row !important; 
+    align-items: stretch;
+}
+
+.lil-gui .folder {
+    width: 280px; 
+    border-right: 1px dashed rgba(255, 255, 255, 0.2); 
+    border-bottom: none; 
+}
+
+.lil-gui.root > .children > .controller {
+    width: 150px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: none !important;
+    padding: 0 10px;
+}
+
+.lil-gui .folder .children {
+    border-radius: 0;
+}
+.lil-gui.root > .children {
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+}
+
+/* === KHO NHÃN DÁN MẪU === */
+.preset-tex {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    cursor: pointer;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.preset-tex:hover {
+    transform: scale(1.2) translateY(-3px);
+    border-color: #00cec9;
+    box-shadow: 0 5px 15px rgba(0, 206, 201, 0.4);
+    z-index: 10;
+}
+
+/* =========================================
+   HIỆU ỨNG THU GỌN MENU 
+========================================= */
+#sidebar-left, #sidebar-right {
+    overflow: visible !important; 
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative; 
+}
+
+#sidebar-right {
+    max-height: 85vh;
+    overflow-y: auto;
+    scrollbar-width: none;         
+    -ms-overflow-style: none;      
+}
+
+#sidebar-right::-webkit-scrollbar {
+    display: none;
+}
+
+#sidebar-left.collapsed-left { transform: translateX(-110%) !important; }
+#sidebar-right.collapsed-right { transform: translateX(110%) !important; }
+
+.toggle-btn {
+    position: absolute;
+    top: 20px;
+    width: 25px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover { background: rgba(0, 206, 201, 0.8); }
+
+#btn-toggle-left { 
+    right: -25px; 
+    border-radius: 0 8px 8px 0; 
+    border-left: none; 
+}
+
+#btn-toggle-right { 
+    left: -25px; 
+    border-radius: 8px 0 0 8px; 
+    border-right: none; 
+}
+
+#sidebar-right {
+    margin-top: -10px; 
+}
+
+#guide-modal {
+    top: 45% !important;
+}
+
+#sidebar-right {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;     
+}
+
+#sidebar-right::-webkit-scrollbar {
+    display: none;             
+}
