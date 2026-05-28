@@ -69,9 +69,9 @@ Dự án đã được tối ưu hóa, loại bỏ các thư viện build trung 
 ### Bước 1: Clone dự án
 
 ```bash
-git clone https://github.com/duytin05/Magic-3D-Toy-Factory.git
-cd Magic-3D-Toy-Factory
-````
+git clone [https://github.com/duytin05/CS105_Magic-Toy-Factory.git](https://github.com/duytin05/CS105_Magic-Toy-Factory.git)
+cd CS105_Magic-Toy-Factory
+```
 
 ### Bước 2: Khởi chạy ứng dụng
 
@@ -116,24 +116,22 @@ http://localhost:8080
 ---
 
 ## 📂 Cấu trúc thư mục
-
-```text
-/magic-toy-factory
+```
+/CS105_Magic-Toy-Factory
 ├── index.html              # File khởi chạy chính
 ├── models/                 # Chứa tài nguyên mô hình 3D (.glb)
-├── src/                    # Logic xử lý lõi
-│   ├──  animation/          # Hiệu ứng GSAP
+├── src/                    # Logic xử lý lõi & Giao diện CSS
+│   ├── animation/          # Hiệu ứng GSAP chuyển cảnh
 │   ├── controls/           # Xử lý sự kiện Raycaster, Affine Transform
 │   ├── core/               # Khởi tạo Scene, Camera, Light, Renderer
-│   ├── data/
+│   ├── data/               # Dữ liệu cấu hình hình khối
 │   ├── objects/            # Sinh vật thể cơ bản & Load Custom Model
 │   ├── ui/                 # Xử lý logic bảng điều khiển, Texture Upload
-│   ├── welcome.css             # Hiệu ứng màn hình chờ
-│   ├── style.css               # UI chính (Glass-morphism)
-│   └──main.js             # Entry point    
+│   ├── welcome.css         # Hiệu ứng màn hình chờ
+│   ├── style.css           # UI chính (Glass-morphism)
+│   └── main.js             # Entry point
 └── README.md               # Tài liệu dự án
 ```
-
 ---
 
 ## 🏆 Nguồn Tài Nguyên (Credits & Attributions)
