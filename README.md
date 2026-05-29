@@ -69,7 +69,7 @@ Dự án đã được tối ưu hóa, loại bỏ các thư viện build trung 
 ### Bước 1: Clone dự án
 
 ```bash
-git clone [https://github.com/duytin05/CS105_Magic-Toy-Factory.git](https://github.com/duytin05/CS105_Magic-Toy-Factory.git)
+git clone https://github.com/duytin05/CS105_Magic-Toy-Factory.git
 cd CS105_Magic-Toy-Factory
 ```
 
