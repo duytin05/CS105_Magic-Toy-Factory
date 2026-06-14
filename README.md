@@ -23,8 +23,17 @@ Dự án hiện thực hóa toàn bộ luồng xử lý đồ họa máy tính (
 ## ✨ Các tính năng kỹ thuật nổi bật
 
 * **Khởi tạo & Quản lý Hình học (Modeling):**
-  * Dựng sẵn 7 khối hình cơ bản: Hộp, Cầu, Nón, Trụ, Bánh xe, Đá quý, Ấm trà.
+  * Dựng sẵn 9 khối hình cơ bản: Hộp, Cầu, Nón, Trụ, Bánh xe, Đá quý, Ấm trà,khối Thắt nút, khối 8 mặt.
   * Hỗ trợ tải và hiển thị các mô hình 3D phức tạp (định dạng `.glb`) thông qua `GLTFLoader`.
+ 
+* **Hệ thống Quản lý Trạng thái (Undo/Redo Siêu Tốc):**
+  * Áp dụng **Memento Pattern** lưu trữ trạng thái trong bộ nhớ RAM (`objectRegistry`).
+  * Khôi phục chính xác 100% dữ liệu của từng chi tiết nhỏ (sub-mesh) bao gồm: Tọa độ, Vertex Colors, Texture, Bóng đổ, và Chế độ vẽ.
+  * Hỗ trợ hiển thị thông báo theo tên thao tác và tổ hợp phím tắt chuẩn (`Ctrl + Z` / `Ctrl + Y`).
+
+* **Lưu trữ "Bản Đồ Gen" & Tự động Phục hồi (Auto-Save):**
+  * Sử dụng cơ sở dữ liệu **IndexedDB** để tự động lưu trữ cấu trúc xưởng theo thời gian thực mà không gây tràn bộ nhớ.
+  * Đảm bảo phục hồi nguyên vẹn số lượng đồ chơi, ảnh dán (Texture) và hoạt ảnh (Animation) ngay cả khi tải lại trang (F5) hoặc đóng trình duyệt.
 
 * **Chế độ hiển thị (Render Modes):**
   * Chuyển đổi linh hoạt giữa 3 chế độ vẽ:
