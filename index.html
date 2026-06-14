@@ -101,8 +101,10 @@
         
         <button id="btn-delete" class="btn-danger" style="display: block; width: 100%; margin-bottom: 10px; text-align: center;">🗑 Xóa đồ chơi đang chọn</button>
         <button id="btn-delete-all" class="btn-danger" style="display: block; width: 100%; background: #c0392b; text-align: center;margin-bottom: 10px;">🧨 Xóa tất cả đồ chơi</button>
-        <button id="btn-undo" class="btn-item btn-outline" style="display: block; width: 100%;  text-align: center;">↩️ Hoàn tác</button>
-
+        <div style="display: flex; gap: 10px;">
+            <button id="btn-undo" class="btn-item btn-outline" style="flex: 1; text-align: center; padding: 10px 5px; font-size: 14px;" title="Phím tắt: Ctrl + Z">↩️ Hoàn tác</button>
+            <button id="btn-redo" class="btn-item btn-outline" style="flex: 1; text-align: center; padding: 10px 5px; font-size: 14px;" title="Phím tắt: Ctrl + Y">↪️ Làm lại</button>
+        </div>
       </aside>
 
       <aside id="sidebar-right" class="glass-panel">
@@ -148,7 +150,7 @@
     </div>
 
     <div id="bottom-bar">
-      <button class="btn-run">🚀 CHẠY DÂY CHUYỀN CHẾ TẠO</button>
+      <button class="btn-run">🚀 CHẠY DÂY CHUYỀN XÁO TRỘN XƯỞNG</button>
     </div>
 
     <div id="alert-overlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); z-index: 9998; backdrop-filter: blur(4px);"></div>

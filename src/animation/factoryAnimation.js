@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { objectsArray, showToast, showAlert } from '../controls/eventHandlers.js';
+import { forceSaveScene } from '../core/SceneStorage.js';
 
 export function initFactoryAnimation() {
     const btnRun = document.querySelector('.btn-run');
@@ -59,6 +60,7 @@ export function initFactoryAnimation() {
                 btnRun.innerText = originalText;
                 btnRun.style.background = ""; 
                 showToast("🎇Đã xáo trộn xong!", true);
+                forceSaveScene();
             }
         });
 

@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import gsap from 'gsap';
+import { saveActionToHistory, performUniversalUndo, performUniversalRedo } from '../core/stateManager.js';
+import { autoSaveScene } from '../core/SceneStorage.js';
 
 export const objectsArray = []; 
 export let selectedObjects = []; 
@@ -39,9 +41,20 @@ export function initRaycaster(camera, scene, renderer, orbitControls) {
     const mouse = new THREE.Vector2();
 
     transformCtrl = new TransformControls(camera, renderer.domElement);
-    transformCtrl.size = 1.5; 
+    transformCtrl.size = 1.5;
 
-    transformCtrl.addEventListener('dragging-changed', (event) => orbitControls.enabled = !event.value);
+    transformCtrl.addEventListener('dragging-changed', (event) => {
+        orbitControls.enabled = !event.value;
+        if (event.value) {
+            let actionName = "Dời chỗ";
+            if (transformCtrl.mode === 'rotate') actionName = "Xoay";
+            if (transformCtrl.mode === 'scale') actionName = "Phóng to";
+            saveActionToHistory(actionName);
+        } else {
+            autoSaveScene();
+        }
+    });
+
     transformCtrl.addEventListener('mouseDown', () => orbitControls.enabled = false);
     transformCtrl.addEventListener('mouseUp', () => orbitControls.enabled = true);
 
@@ -190,8 +203,11 @@ export function initTransformUI() {
     document.getElementById('btn-scale')?.addEventListener('click', () => attachAndSetMode('scale'));
 }
 
-export function deleteSelectedObject(scene) {
+export function deleteSelectedObject(scene)
+{
     if (selectedObjects.length === 0) { showAlert("⚠️ Ôi bạn ơi!", "Bạn chưa chọn đồ chơi nào để xóa!"); return 0; }
+    saveActionToHistory("Xóa đồ chơi")
+    
     const deletedBatch = [];
     selectedObjects.forEach(obj => {
         if (transformCtrl) transformCtrl.detach();
@@ -206,10 +222,15 @@ export function deleteSelectedObject(scene) {
     const statusText = document.getElementById('status-text');
     if (statusText) { statusText.innerText = "🎯 Đang chọn: 0 đồ chơi"; statusText.classList.remove('active'); }
     showToast(`💥 Bạn đã xóa ${deletedBatch.length} món đồ chơi!`);
+
+    autoSaveScene();
 }
 
-export function deleteAllObjects(scene) {
+export function deleteAllObjects(scene) 
+{
     if (objectsArray.length === 0) return 0;
+    saveActionToHistory("Dọn sạch xưởng")
+
     const deletedBatch = [];
     if (transformCtrl) transformCtrl.detach();
     objectsArray.forEach(obj => {
@@ -222,11 +243,14 @@ export function deleteAllObjects(scene) {
     const statusText = document.getElementById('status-text');
     if (statusText) { statusText.innerText = "🎯 Đang chọn: 0 đồ chơi"; statusText.classList.remove('active'); }
     showToast(`🌪️ Đã dọn sạch sẽ ${deletedBatch.length} đồ chơi!`);
+
+    autoSaveScene();
 }
 
 export function undoLastAction(scene) {
-    if (trashBin.length === 0) { showAlert("🤷‍♂️ Trống rỗng!", "Bạn chưa xóa đồ chơi nào để mà khôi phục!"); return; }
-    const lastBatch = trashBin.pop(); 
-    lastBatch.forEach(obj => { scene.add(obj); objectsArray.push(obj); });
-    showToast(`✨ Đã lấy lại ${lastBatch.length} món đồ chơi!`, true);
+    performUniversalUndo(scene);
+}
+
+export function redoLastAction(scene) {
+    performUniversalRedo(scene);
 }

@@ -8,13 +8,15 @@ import { getPlane } from './objects/createBasicShapes.js';
 import { getAmbientLight, getSpotLight } from './core/lights.js';
 import { getBox, getSphere, getCone, getCylinder, getTorus, getDodecahedron, getTorusKnot, getOctahedron } from './objects/createBasicShapes.js';
 import { getTeapot } from './objects/createTeapot.js';
-import { initTransformUI, objectsArray, selectedObjects, initRaycaster, deleteSelectedObject, deleteAllObjects, undoLastAction, showToast, showAlert } from './controls/eventHandlers.js';
-import { initToolPanel, applyRenderMode } from './ui/toolPanel.js'; // 🎯 ĐÃ IMPORT BÍ KÍP
+import { initTransformUI, objectsArray, selectedObjects, initRaycaster, deleteSelectedObject, deleteAllObjects,undoLastAction, redoLastAction, showToast, showAlert } from './controls/eventHandlers.js';
+import { initToolPanel, applyRenderMode } from './ui/toolPanel.js'; 
 import { initTeacherMode } from './ui/teacherMode.js';
 import { initTextureUploader } from './ui/textureUploader.js';
 import { initCustomModelLoader, mixers } from './objects/loadCustomModel.js';
 import { initFactoryAnimation } from './animation/factoryAnimation.js'; 
 import { startWelcomeAnimation } from './animation/welcomeAnimation.js';
+import { loadSceneFromIndexedDB } from './core/SceneStorage.js';
+import { saveActionToHistory } from './core/stateManager.js';
 
 const clock = new THREE.Clock();
 
@@ -68,6 +70,7 @@ function init() {
     }
 
     document.getElementById('btn-undo')?.addEventListener('click', () => undoLastAction(scene));
+    document.getElementById('btn-redo')?.addEventListener('click', () => redoLastAction(scene));
 
     const btnGuide = document.querySelector('.btn-guide');
     const guideModal = document.getElementById('guide-modal');
@@ -108,6 +111,8 @@ function init() {
                 showAlert("⚠️ Xưởng đang trống!", "Hãy thêm đồ chơi trước khi dùng đũa thần nha!");
                 return;
             }
+
+            saveActionToHistory(`Đổi sang ${mode}`);
 
             targetArray.forEach(obj => {
                 obj.traverse(child => {
@@ -173,6 +178,10 @@ function init() {
 
     update(renderer, scene, camera, controls);
     startWelcomeAnimation(camera, scene);
+
+    setTimeout(() => {
+        loadSceneFromIndexedDB(scene); 
+    }, 1500);
 }
 
 function update(renderer, scene, camera, controls) {
@@ -194,5 +203,15 @@ function update(renderer, scene, camera, controls) {
         update(renderer, scene, camera, controls);
     });
 }
+
+window.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
+            event.preventDefault();
+            undoLastAction(scene);
+        } else if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
+            event.preventDefault();
+            redoLastAction(scene);
+        }
+    });
 
 init();

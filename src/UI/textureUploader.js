@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { selectedObjects, showAlert, showToast } from '../controls/eventHandlers.js'; 
+import { autoSaveScene } from '../core/SceneStorage.js';
+import { saveActionToHistory } from '../core/stateManager.js';
 
 function checkInvalidRenderMode() {
     let isInvalid = false;
@@ -42,6 +44,7 @@ export function initTextureUploader() {
         reader.onload = function(e) {
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(e.target.result, (texture) => {
+                saveActionToHistory("Dán Texture từ máy tính");
                 texture.colorSpace = THREE.SRGBColorSpace;
                 selectedObjects.forEach(obj => {
                     obj.traverse(child => {
@@ -61,6 +64,8 @@ export function initTextureUploader() {
                     });
                 });
                 showToast(`🎨 Đã dán nhãn thành công!`, true);
+                saveActionToHistory("Dán nhãn");
+                autoSaveScene();
             });
         };
         reader.readAsDataURL(file);
@@ -71,6 +76,7 @@ export function initTextureUploader() {
     if (btnRemove) {
         btnRemove.addEventListener('click', () => {
             if (selectedObjects.length === 0) { showAlert("⚠️ Khoan đã!", "Bạn chưa chọn đồ chơi nào để tẩy nhãn!"); return; }
+            saveActionToHistory("Tẩy Texture");
             selectedObjects.forEach(obj => {
                 obj.traverse(child => {
                     if (child.isMesh) {
@@ -89,6 +95,7 @@ export function initTextureUploader() {
                 });
             });
             showToast(`🧽 Đã tẩy nhãn sạch sẽ!`, true);
+            autoSaveScene();
         });
     }
 
@@ -101,7 +108,6 @@ export function initTextureUploader() {
                 return; 
             }
 
-            // 🚫 BỘ LỌC CẢNH BÁO TEXTURE
             if (checkInvalidRenderMode()) {
                 showAlert("⚠️ Không thể dán nhãn!", "Đồ chơi đang ở dạng Point hoặc Lines. Vui lòng đổi trạng thái về Solid để dán nhãn nha!");
                 return;
@@ -109,6 +115,7 @@ export function initTextureUploader() {
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(img.src, (texture) => {
+                saveActionToHistory("Dán Texture có sẵn");
                 texture.colorSpace = THREE.SRGBColorSpace;
                 selectedObjects.forEach(obj => {
                     obj.traverse(child => {
@@ -128,6 +135,7 @@ export function initTextureUploader() {
                     });
                 });
                 showToast(`🎨 Đã dán nhãn mẫu thành công!`, true);
+                autoSaveScene();
             });
         });
     });

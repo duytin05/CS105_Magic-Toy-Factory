@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { shapeCreators } from '../data/shapes.js';
 import { objectsArray } from '../controls/eventHandlers.js';
+import { autoSaveScene } from '../core/SceneStorage.js';
 
 export function applyRenderMode(child, mode) {
     if (child.userData.isCollider) return;
@@ -113,6 +114,7 @@ export function initToolPanel(scene, planeSize = 30, minSpacing = 2) {
         if (hasSpace) {
             scene.add(mesh);
             objectsArray.push(mesh);
+            autoSaveScene();
         } else {
             const alertBox = document.getElementById('custom-alert');
             const alertOverlay = document.getElementById('alert-overlay');

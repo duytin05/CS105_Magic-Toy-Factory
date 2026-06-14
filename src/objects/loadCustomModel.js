@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { objectsArray, showToast, showAlert } from '../controls/eventHandlers.js';
-import { getSafePosition, applyRenderMode } from '../ui/toolPanel.js'; // 🎯 ĐÃ IMPORT BÍ KÍP
+import { getSafePosition, applyRenderMode } from '../ui/toolPanel.js'; 
+import { autoSaveScene } from '../core/SceneStorage.js'; 
 import gsap from 'gsap';
 
 export const mixers = []; 
@@ -41,13 +42,10 @@ export function initCustomModelLoader(scene) {
             (gltf) => {
                 const model = gltf.scene;
                 const wrapper = new THREE.Group();
-                                
                 const currentMode = document.getElementById('create-mode-select').value;
 
                 model.traverse((child) => {
                     if (child.isMesh || child.isSkinnedMesh) {
-                        
-                        // Phát hiện hộp tàng hình và gắn thẻ
                         if ((child.material.transparent && child.material.opacity === 0) || 
                             child.name.toLowerCase().includes('bound') || 
                             child.name.toLowerCase().includes('collider') ||
@@ -58,7 +56,6 @@ export function initCustomModelLoader(scene) {
                             child.userData.isCollider = true; 
                         }
                         
-                        // Nếu KHÔNG PHẢI là hộp tàng hình thì mới tô màu và cho hiển thị
                         if (!child.userData.isCollider) {
                             child.castShadow = true;
                             child.receiveShadow = true;
@@ -98,20 +95,35 @@ export function initCustomModelLoader(scene) {
                 model.position.set(-center.x, -center.y, -center.z);
                 wrapper.add(model);
 
+                wrapper.userData.shapeType = 'CustomModel';
+                wrapper.userData.modelUrl = modelUrl;
+                wrapper.userData.customColor = pickedColorHex;
+                wrapper.userData.useDefaultColor = useDefault;
+
                 const hasSpace = getSafePosition(wrapper, 30, 3);
                 if (hasSpace) {
                     if (gltf.animations && gltf.animations.length > 0) {
+                        wrapper.userData.animations = gltf.animations; 
+                        
                         const mixer = new THREE.AnimationMixer(model);
                         const action = mixer.clipAction(gltf.animations[0]); 
                         action.play();
                         mixers.push(mixer);
                     }
+                    
                     scene.add(wrapper);
                     objectsArray.push(wrapper);
 
                     const finalY = wrapper.position.y;
                     wrapper.position.y += 15; 
-                    gsap.to(wrapper.position, { y: finalY, duration: 1.2, ease: "bounce.out" });
+                    gsap.to(wrapper.position, { 
+                        y: finalY, 
+                        duration: 1.2, 
+                        ease: "bounce.out",
+                        onComplete: () => {
+                            autoSaveScene(); 
+                        }
+                    });
                     showToast(`✨ Sinh vật đã đáp xuống an toàn!`, true);
                 } else {
                     showAlert("🧸 Xưởng đầy rồi!", "Xưởng bừa bộn quá rồi, dọn dẹp bớt thôi nào!");
@@ -125,4 +137,3 @@ export function initCustomModelLoader(scene) {
         );
     });
 }
-
